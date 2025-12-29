@@ -5,7 +5,7 @@ export const createUser = asyncHandler(async (req, res) => {
   try {
     const { name, email, password, phone, role, parkingLocation } = req.body;
 
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password || !role || !phone) {
       return res.status(400).json({
         success: false,
         message: "All required fields must be provided",
@@ -42,6 +42,7 @@ export const createUser = asyncHandler(async (req, res) => {
     },
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "Failed to create user",
@@ -116,6 +117,7 @@ export const getAll = asyncHandler(async (req, res) => {
       data: users,
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Failed to fetch users",
