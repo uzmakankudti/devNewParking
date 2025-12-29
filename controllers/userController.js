@@ -1,5 +1,8 @@
 import asyncHandler from "express-async-handler";
 import User from "../schemas/userSchema.js";
+import mongoose from "mongoose";
+import ParkingLocation from "../schemas/parkingLocationSchema.js";
+import { rolePermissions } from "../utils/permissions.js";
 
 export const createUser = asyncHandler(async (req, res) => {
   try {
@@ -21,6 +24,27 @@ export const createUser = asyncHandler(async (req, res) => {
       });
     }
 
+    //  VALIDATE PARKING LOCATION
+    if (parkingLocation) {
+
+      //Check valid ObjectId format
+      if (!mongoose.Types.ObjectId.isValid(parkingLocation)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid parking location ID",
+        });
+      }
+
+      //Check if parking location exists
+      const locationExists = await ParkingLocation.findById(parkingLocation);
+      if (!locationExists) {
+        return res.status(404).json({
+          success: false,
+          message: "Parking location not found",
+        });
+      }
+    }
+
     const user = await User.create({
       name,
       email,
@@ -39,7 +63,7 @@ export const createUser = asyncHandler(async (req, res) => {
         email: user.email,
         role: user.role,
         phone: user.phone,
-    },
+      },
     });
   } catch (error) {
     console.error(error);
@@ -85,13 +109,13 @@ export const loginUser = asyncHandler(async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
       },
+      permissions: rolePermissions[user.role],
     });
   } catch (error) {
     res.status(500).json({
@@ -236,9 +260,7 @@ export const searchUser = asyncHandler(async (req, res) => {
       ];
     }
 
-    const users = await User.find(searchCondition).select(
-      "name email role"
-    );
+    const users = await User.find(searchCondition).select("name email role");
 
     return res.status(200).json({
       success: true,

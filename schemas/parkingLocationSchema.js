@@ -18,10 +18,18 @@ const parkingLocationSchema = new mongoose.Schema(
       ref: "User", // Super Admin
       required: true,
     },
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    
   },
   { timestamps: true }
 );
 
-const ParkingLocation = mongoose.model("ParkingLocation",parkingLocationSchema);
+// Prevent duplicate parking locations
+parkingLocationSchema.index({ name: 1, address: 1 }, { unique: true });
 
+const ParkingLocation = mongoose.model("ParkingLocation",parkingLocationSchema);
 export default ParkingLocation;
