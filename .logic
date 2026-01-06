@@ -1,0 +1,31 @@
+//Calculate Time Difference
+const durationMs = exitTime - ticket.entryTime;
+
+//Convert ms → hours
+const hours = Math.ceil(durationMs / (1000 * 60 * 60));
+
+//Calculate Amount
+const ratePerHour = ticket.vehicleType === "CAR" ? 40 : 20;
+
+//46 hours × ₹40 = ₹1840
+
+/* ⭐ Option 1: JWT Authentication (Professional Touch)
+
+Protect slot & ticket APIs
+
+Real role-based access
+
+Interview 
+
+⭐ Option 3: Reports & Analytics
+
+Daily revenue
+
+Vehicles per day
+
+💬 My Honest Advice
+
+If your goal is job / internship:
+
+👉 Do JWT + one report API
+That’s enough to impress. */

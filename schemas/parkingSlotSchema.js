@@ -28,6 +28,11 @@ const parkingSlotSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// IMPORTANT: slotNumber must be unique per location
+parkingSlotSchema.index(
+  { slotNumber: 1, parkingLocation: 1 },
+  { unique: true }
+);
 const ParkingSlot = mongoose.model("ParkingSlot", parkingSlotSchema);
 
 export default ParkingSlot;

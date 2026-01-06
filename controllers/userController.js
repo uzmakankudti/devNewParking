@@ -3,6 +3,7 @@ import User from "../schemas/userSchema.js";
 import mongoose from "mongoose";
 import ParkingLocation from "../schemas/parkingLocationSchema.js";
 import { rolePermissions } from "../utils/permissions.js";
+import { generateToken } from "../utils/jwtUtils.js";
 
 export const createUser = asyncHandler(async (req, res) => {
   try {
@@ -106,17 +107,21 @@ export const loginUser = asyncHandler(async (req, res) => {
       });
     }
 
+    //create JWT token
+    const token = generateToken(user);
+
     return res.status(200).json({
       success: true,
       message: "Login successful",
+      token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
       },
-      permissions: rolePermissions[user.role],
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
