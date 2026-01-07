@@ -4,6 +4,6 @@ import { dailyReport } from "../controllers/reportController.js";
 
 const reportRouter = express.Router();
 
-reportRouter.route("/dailyReport", authMiddleware).get(dailyReport);
+reportRouter.route("/dailyReport").get(dailyReport, authMiddleware);
 
 export default router;

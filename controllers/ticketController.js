@@ -130,7 +130,7 @@ export const checkOutVehicle = asyncHandler(async (req, res) => {
         message: "Access denied. Only Parking ATTENDANT can check out vehicles.",
       });
     }
-    
+
     return res.status(200).json({
       success: true,
       message: "Vehicle checked out & payment completed",
@@ -149,3 +149,5 @@ export const checkOutVehicle = asyncHandler(async (req, res) => {
     });
   }
 });
+
+
