@@ -82,12 +82,12 @@ export const checkInVehicle = asyncHandler(async (req, res) => {
 // CHECK-OUT (CLOSE TICKET)
 export const checkOutVehicle = asyncHandler(async (req, res) => {
   try {
-    const { ticketNumber } = req.body;
+    const { ticketNumber, paymentMode } = req.body;
 
-    if (!ticketNumber) {
+    if (!ticketNumber || !paymentMode) {
       return res.status(400).json({
         success: false,
-        message: "Ticket number is required",
+        message: "Ticket number and payment mode are required",
       });
     }
 
@@ -115,6 +115,7 @@ export const checkOutVehicle = asyncHandler(async (req, res) => {
     // update ticket (IMPORTANT FIX)
     ticket.exitTime = exitTime;
     ticket.amount = amount;
+    ticket.paymentMode = paymentMode;
     ticket.status = "COMPLETED";
     ticket.paymentStatus = "PAID"; // FIX HERE
 
@@ -150,4 +151,30 @@ export const checkOutVehicle = asyncHandler(async (req, res) => {
   }
 });
 
+export const paymentTypeCount = asyncHandler(async (req, res) => {
+  try {
+    const cashCount = await Ticket.countDocuments({
+      paymentMode: "CASH",
+      paymentStatus: "PAID",
+    });
+
+    const onlineCount = await Ticket.countDocuments({
+      paymentMode: "ONLINE",
+      paymentStatus: "PAID",
+    });
+
+    return res.status(200).json({
+      success: true,
+      cash: cashCount,
+      online: onlineCount,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch payment type count",
+      error: error.message,
+    });
+  }
+});
 

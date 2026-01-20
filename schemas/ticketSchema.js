@@ -47,6 +47,12 @@ const ticketSchema = new mongoose.Schema(
       default: 0,
     },
 
+    paymentMode: {
+      type: String,
+      enum: ["CASH", "ONLINE"],
+      default: "CASH",
+    },
+
     paymentStatus: {
       type: String,
       enum: ["PENDING", "PAID"],
@@ -59,7 +65,7 @@ const ticketSchema = new mongoose.Schema(
       default: "ACTIVE",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Ticket", ticketSchema);

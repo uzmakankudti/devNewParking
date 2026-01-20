@@ -8,6 +8,10 @@ export const rolePermissions = {
     canViewReports: true,
   },
 
+/*   Because in real life, the owner never goes to the parking lot.
+He manages branches, not vehicles.
+ */
+
   PARKING_ADMIN: {
     canCreateParkingLocation: false,
     canCreateUser: true,
